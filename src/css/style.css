@@ -1,0 +1,27 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+div.tablero {
+  width: 405px;
+  margin: 0 auto;
+  margin-top: 70px;
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+div.tablero div.cuadro_blanco {
+  width: 50px;
+  height: 50px;
+  border: 1px solid;
+  background: bisque;
+}
+div.tablero div.cuadro_negro {
+  width: 50px;
+  height: 50px;
+  border: 1px solid;
+  background: rgb(209, 180, 143);
+}/*# sourceMappingURL=style.css.map */
