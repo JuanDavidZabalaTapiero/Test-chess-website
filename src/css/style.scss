@@ -18,6 +18,9 @@ div.tablero {
         height: 50px;
         border: 1px solid;
         background: bisque;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     div.cuadro_negro {
@@ -25,5 +28,16 @@ div.tablero {
         height: 50px;
         border: 1px solid;
         background: rgb(209, 180, 143);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    div.cuadro_seleccionado {
+        background: lightpink;
+    }
+
+    div.cuadro_movimiento_posible {
+        background: lightgreen;
     }
 }
