@@ -1,92 +1,63 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    var id_cuadro_seleccionado = null;
+    let idCuadroSeleccionado = null;
 
-    document.querySelectorAll('.cuadro_blanco, .cuadro_negro').forEach(function (cuadro) {
-        cuadro.addEventListener('click', function () {
+    document.querySelectorAll('.cuadro_blanco, .cuadro_negro').forEach(cuadro => {
+        cuadro.addEventListener('click', () => {
 
-            if (cuadro.querySelector('p')) {
-                if (id_cuadro_seleccionado == null) {
-                    cuadro.classList.add('cuadro_seleccionado');
+            const p = cuadro.querySelector('p');
+            if (!p) return;
 
-                    id_cuadro_seleccionado = cuadro.id;
-
-                    // P ADENTRO DEL DIV
-                    var p_div = document.getElementById(id_cuadro_seleccionado).querySelector('p');
-
-                    // CUADRO POSIBLE
-                    var div_cuadro_seleccionado = document.getElementById(parseInt(id_cuadro_seleccionado) + 8);
-
-                    div_cuadro_seleccionado.classList.add('cuadro_movimiento_posible');
-
-                    // SI CLICKEO EL DIV CON BG DE COLOR VERDE
-                    div_cuadro_seleccionado.addEventListener('click', function () {
-
-                        document.getElementById(id_cuadro_seleccionado).classList.remove('cuadro_seleccionado');
-
-                        // CUADRO POSIBLE
-                        document.getElementById(parseInt(id_cuadro_seleccionado) + 8).classList.remove('cuadro_movimiento_posible');
-
-                        var new_p_div = document.createElement('p');
-
-                        new_p_div.innerText = p_div.innerHTML;
-
-                        p_div.remove();
-
-                        // AÑADO EL P AL DIV SELECCIONADO
-                        div_cuadro_seleccionado.appendChild(new_p_div);
-
-                        id_cuadro_seleccionado = null;
-
-                    });
-
-                } else if (id_cuadro_seleccionado == cuadro.id) {
-                    document.getElementById(id_cuadro_seleccionado).classList.toggle('cuadro_seleccionado');
-
-                    document.getElementById(parseInt(id_cuadro_seleccionado) + 8).classList.toggle('cuadro_movimiento_posible');
-
-                    id_cuadro_seleccionado = null;
-                } else {
-
-                    document.getElementById(id_cuadro_seleccionado).classList.remove('cuadro_seleccionado');
-
-                    document.getElementById(parseInt(id_cuadro_seleccionado) + 8).classList.remove('cuadro_movimiento_posible');
-
-                    id_cuadro_seleccionado = cuadro.id;
-
-                    document.getElementById(id_cuadro_seleccionado).classList.add('cuadro_seleccionado');
-
-                    // CUADRO POSIBLE
-                    var div_cuadro_seleccionado = document.getElementById(parseInt(id_cuadro_seleccionado) + 8);
-
-                    // CAMBIO EL BG DEL CUADRO POSIBLE 
-                    div_cuadro_seleccionado.classList.add('cuadro_movimiento_posible');
-
-                    // SI CLICKEO EL DIV CON BG DE COLOR VERDE
-                    div_cuadro_seleccionado.addEventListener('click', function () {
-
-                        document.getElementById(id_cuadro_seleccionado).classList.remove('cuadro_seleccionado');
-
-                        // CUADRO POSIBLE
-                        document.getElementById(parseInt(id_cuadro_seleccionado) + 8).classList.remove('cuadro_movimiento_posible');
-
-                        var new_p_div = document.createElement('p');
-
-                        new_p_div.innerText = p_div.innerHTML;
-
-                        p_div.remove();
-
-                        // AÑADO EL P AL DIV SELECCIONADO
-                        div_cuadro_seleccionado.appendChild(new_p_div);
-
-                        id_cuadro_seleccionado = null;
-
-                    });
-                }
+            if (idCuadroSeleccionado === null) {
+                seleccionarCuadro(cuadro, p);
+            } else if (idCuadroSeleccionado === cuadro.id) {
+                deseleccionarCuadro(cuadro);
             } else {
-                return;
+                cambiarSeleccion(cuadro, p);
             }
-        })
-    })
+        });
+    });
 
-})
+    function seleccionarCuadro(cuadro, p) {
+        cuadro.classList.add('cuadro_seleccionado');
+        idCuadroSeleccionado = cuadro.id;
+
+        const divCuadroPosible = document.getElementById(parseInt(idCuadroSeleccionado) + 8);
+        divCuadroPosible.classList.add('cuadro_movimiento_posible');
+
+        divCuadroPosible.addEventListener('click', moverP, { once: true });
+    }
+
+    function deseleccionarCuadro(cuadro) {
+        cuadro.classList.toggle('cuadro_seleccionado');
+        const divCuadroPosible = document.getElementById(parseInt(idCuadroSeleccionado) + 8);
+        divCuadroPosible.classList.toggle('cuadro_movimiento_posible');
+        idCuadroSeleccionado = null;
+    }
+
+    function cambiarSeleccion(cuadro, p) {
+        const cuadroAnterior = document.getElementById(idCuadroSeleccionado);
+        cuadroAnterior.classList.remove('cuadro_seleccionado');
+        const divCuadroPosible = document.getElementById(parseInt(idCuadroSeleccionado) + 8);
+        divCuadroPosible.classList.remove('cuadro_movimiento_posible');
+
+        seleccionarCuadro(cuadro, p);
+    }
+
+    function moverP(event) {
+        const cuadroSeleccionado = document.getElementById(idCuadroSeleccionado);
+        cuadroSeleccionado.classList.remove('cuadro_seleccionado');
+
+        const divCuadroPosible = document.getElementById(parseInt(idCuadroSeleccionado) + 8);
+        divCuadroPosible.classList.remove('cuadro_movimiento_posible');
+
+        const newP = document.createElement('p');
+        const p = cuadroSeleccionado.querySelector('p');
+        newP.innerText = p.innerHTML;
+        p.remove();
+
+        event.currentTarget.appendChild(newP);
+        idCuadroSeleccionado = null;
+    }
+
+});
